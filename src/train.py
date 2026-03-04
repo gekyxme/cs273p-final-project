@@ -124,6 +124,9 @@ def main():
     parser.add_argument("--batch_size",  default=None, type=int)
     parser.add_argument("--lr",          default=None, type=float)
     parser.add_argument("--freeze_backbone", default=None)
+    parser.add_argument("--fusion_mode",     default=None,
+                        choices=["fusion_concat", "fusion_attention",
+                                 "image_only", "tabular_only"])
     args = parser.parse_args()
 
     cfg = load_config(
@@ -134,6 +137,7 @@ def main():
             "batch_size":      args.batch_size,
             "lr":              args.lr,
             "freeze_backbone": args.freeze_backbone,
+            "fusion_mode":     args.fusion_mode,
         },
     )
 
@@ -146,7 +150,9 @@ def main():
     train_loader, val_loader = get_dataloaders(cfg)
 
     # ── Model ─────────────────────────────────────────────────────────────────
+    fusion_mode = cfg.get("fusion_mode", "fusion_concat")
     model = PawpularityModel(
+        fusion_mode=fusion_mode,
         freeze_backbone=cfg["freeze_backbone"],
         tabular_input_dim=cfg["tabular_input_dim"],
         tabular_hidden_dim=cfg["tabular_hidden_dim"],
@@ -154,6 +160,7 @@ def main():
         fusion_hidden_dim=cfg["fusion_hidden_dim"],
         dropout=cfg["dropout"],
     ).to(device)
+    print(f"[Model] fusion_mode: {fusion_mode}")
 
     print(f"[Model] Trainable params: {count_parameters(model):,}")
 
@@ -176,13 +183,14 @@ def main():
         print(f"[TensorBoard] Logging to {log_dir}")
 
     # ── Training Loop ─────────────────────────────────────────────────────────
-    ckpt_dir  = repo_root / cfg["checkpoint_dir"]
-    best_rmse = math.inf
+    ckpt_dir   = repo_root / cfg["checkpoint_dir"]
+    ckpt_name  = f"{fusion_mode}.pt"   # e.g. fusion_concat.pt, image_only.pt
+    best_rmse  = math.inf
     best_epoch = 0
 
     print(f"\n{'='*55}")
     print(f" Training for {cfg['epochs']} epochs | "
-          f"debug_mode={cfg['debug_mode']} | device={device}")
+          f"mode={fusion_mode} | debug={cfg['debug_mode']} | device={device}")
     print(f"{'='*55}\n")
 
     for epoch in range(1, cfg["epochs"] + 1):
@@ -226,7 +234,7 @@ def main():
                     "val_rmse":         val_rmse,
                     "cfg":              cfg,
                 },
-                ckpt_dir / "best.pt",
+                ckpt_dir / ckpt_name,
             )
             print(f"  ✓ New best val RMSE: {best_rmse:.4f} — checkpoint saved.")
 
@@ -234,7 +242,7 @@ def main():
     print(f"\n{'='*55}")
     print(f" Training complete.")
     print(f" Best val RMSE: {best_rmse:.4f} at epoch {best_epoch}")
-    print(f" Checkpoint   : {ckpt_dir / 'best.pt'}")
+    print(f" Checkpoint   : {ckpt_dir / ckpt_name}")
     print(f"{'='*55}")
 
     if writer:

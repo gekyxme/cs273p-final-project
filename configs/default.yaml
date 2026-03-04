@@ -4,6 +4,7 @@ debug_mode: true           # true → use data/debug/ (100 imgs); false → full
 
 # ── Model ─────────────────────────────────────────────────────────────────────
 backbone: "efficientnet_b0"   # torchvision backbone identifier
+fusion_mode: "fusion_concat"  # fusion_concat | fusion_attention | image_only | tabular_only
 freeze_backbone: false        # true → freeze all EfficientNet weights except head
 tabular_input_dim: 12         # number of metadata features
 tabular_hidden_dim: 64        # first hidden layer size in tabular MLP

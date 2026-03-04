@@ -1,0 +1,28 @@
+# Ablation 1a: Image-only baseline
+# No tabular features — CNN alone predicts Pawpularity.
+# Compare val RMSE against fusion_concat to justify the fusion module.
+
+data_dir:         "data"
+checkpoint_dir:   "checkpoints"
+log_dir:          "runs/image_only"
+debug_mode:       false
+val_split:        0.2
+image_size:       224
+tabular_input_dim: 12
+
+backbone:          "efficientnet_b0"
+fusion_mode:       "image_only"
+freeze_backbone:   false
+tabular_hidden_dim: 64
+tabular_output_dim: 32
+fusion_hidden_dim:  256
+dropout:           0.3
+
+seed:             42
+epochs:           25
+batch_size:       32
+lr:               1.0e-3
+weight_decay:     1.0e-4
+scheduler:        "cosine"
+num_workers:      0
+log_interval:     10
