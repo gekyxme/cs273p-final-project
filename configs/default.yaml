@@ -1,0 +1,33 @@
+# ── Data ──────────────────────────────────────────────────────────────────────
+data_dir: "data"           # root data directory (relative to repo root)
+debug_mode: true           # true → use data/debug/ (100 imgs); false → full data
+
+# ── Model ─────────────────────────────────────────────────────────────────────
+backbone: "efficientnet_b0"   # torchvision backbone identifier
+freeze_backbone: false        # true → freeze all EfficientNet weights except head
+tabular_input_dim: 12         # number of metadata features
+tabular_hidden_dim: 64        # first hidden layer size in tabular MLP
+tabular_output_dim: 32        # output dim of tabular MLP
+fusion_hidden_dim: 256        # hidden dim of fusion FC head
+dropout: 0.3
+
+# ── Training ──────────────────────────────────────────────────────────────────
+seed: 42
+epochs: 25
+batch_size: 32
+num_workers: 0               # keep 0 for MPS stability
+val_split: 0.2               # fraction of train data used for validation
+image_size: 224
+
+# ── Optimizer ─────────────────────────────────────────────────────────────────
+optimizer: "adamw"
+lr: 1.0e-3
+weight_decay: 1.0e-4
+
+# ── Scheduler ─────────────────────────────────────────────────────────────────
+scheduler: "cosine"          # cosine annealing LR
+
+# ── Checkpointing & Logging ───────────────────────────────────────────────────
+checkpoint_dir: "checkpoints"
+log_dir: "runs"              # TensorBoard log directory
+log_interval: 10             # log every N batches
