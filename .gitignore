@@ -1,6 +1,9 @@
 # macOS
 .DS_Store
 
+# Kaggle API credentials (never commit)
+.kaggle/
+
 # Python
 __pycache__/
 *.py[cod]
