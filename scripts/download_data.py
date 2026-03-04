@@ -7,8 +7,8 @@ from pathlib import Path
 # ── Paths ────────────────────────────────────────────────────────────────────
 REPO_ROOT  = Path(__file__).resolve().parent.parent
 DATA_RAW   = REPO_ROOT / "data" / "raw"
-DATASET    = "elemento/petfindermy-pawpularity-contest"
-DATASET_ZIP = "petfindermy-pawpularity-contest.zip"
+DATASET    = "schulta/petfinder-pawpularity-score-clean"
+DATASET_ZIP = "petfinder-pawpularity-score-clean.zip"
 
 def check_kaggle_credentials():
     """Verify ~/.kaggle/kaggle.json exists and has correct permissions."""
