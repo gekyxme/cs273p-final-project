@@ -79,3 +79,27 @@ All models converge near RMSE ~20.5, which is close to the dataset's inherent no
 (Pawpularity std ≈ 20.6). This is consistent with top public Kaggle solutions (~17–18 RMSE)
 which required large ensembles and test-time augmentation to push meaningfully below this floor.
 The multimodal fusion design is validated, it is the best single-model configuration tested.
+
+---
+
+### Grad-CAM Interpretability
+
+Grad-CAM (Gradient-weighted Class Activation Mapping) visualises which parts of a pet image
+the CNN focused on when predicting its Pawpularity score.
+
+**How to read the grid:**
+- Top row: original images with their true Pawpularity scores
+- Bottom row: Grad-CAM heatmap overlay with the model's predicted score
+- Warm colours (red/yellow) = regions the CNN weighted most heavily
+- Cool colours (blue) = regions the CNN largely ignored
+
+![Grad-CAM Grid](assets/gradcam_grid.png)
+
+**Finding:** The model consistently focuses on the pet's face, eyes, and body, semantically
+meaningful regions, rather than background or irrelevant scene elements. This confirms the
+model has learned visually meaningful features and is not exploiting spurious correlations.
+
+To regenerate with a different checkpoint or more images:
+```bash
+python scripts/grad_cam.py --checkpoint checkpoints/best.pt --n_images 16
+```
