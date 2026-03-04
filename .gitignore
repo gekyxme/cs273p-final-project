@@ -1,1 +1,31 @@
+# macOS
 .DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Environments
+.env
+.venv/
+
+# Data & model artifacts (large files, never commit)
+data/
+checkpoints/
+*.pt
+*.pth
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints/
+
+# TensorBoard
+runs/
+
+# IDE
+.vscode/
+.idea/

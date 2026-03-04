@@ -1,0 +1,19 @@
+name: pawpularity
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pandas
+  - scikit-learn
+  - pillow
+  - pyyaml
+  - tqdm
+  - matplotlib
+  - tensorboard
+  - pip
+  - pip:
+      - kaggle
