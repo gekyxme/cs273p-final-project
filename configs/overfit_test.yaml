@@ -1,0 +1,32 @@
+# ── Overfit test config ───────────────────────────────────────────────────────
+# Goal: memorize 80 training images → train RMSE should drop to ~3-8
+# Regularization is intentionally disabled here.
+# DO NOT use this config for real training.
+
+data_dir:         "data"
+checkpoint_dir:   "checkpoints"
+log_dir:          "runs/overfit_test"
+
+# Data
+debug_mode:       true
+val_split:        0.2
+image_size:       224
+tabular_input_dim: 12
+
+# Model
+backbone:          "efficientnet_b0"
+freeze_backbone:   false
+tabular_hidden_dim: 64
+tabular_output_dim: 32
+fusion_hidden_dim:  256
+dropout:           0.0        # disabled
+
+# Training
+seed:             42
+epochs:           100
+batch_size:       8           # more gradient steps per epoch
+lr:               1.0e-3
+weight_decay:     0.0         # no L2 regularization
+scheduler:        "cosine"
+num_workers:      0
+log_interval:     10
